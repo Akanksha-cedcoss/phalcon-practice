@@ -1,0 +1,11 @@
+<?php
+$this->tag->setTitle("hello user " . $this->session->name . "");
+echo $this->tag->getTitle();
+echo "<br>";
+echo $this->tag->linkTo(
+    [
+    'login/logout',
+    'Log out!',
+    "class" => "btn btn-primary"
+    ]
+);

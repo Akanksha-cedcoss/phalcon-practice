@@ -1,0 +1,23 @@
+<h2>Log in using this form</h2>
+
+<?php echo $this->tag->form("login/login"); ?>
+
+    <p>
+        <label for="email">E-mail</label>
+        <?php echo $this->tag->textField("email"); ?>
+    </p>
+
+    <p>
+        <label for="password">Password</label>
+        <?php echo $this->tag->textField("password"); ?>
+    </p>
+    <p>
+        <label for="remember">Remember me</label>
+        <input type="checkbox" id="delivered" name="remember" value="1" checked="checked"> 
+    </p>
+    <p>
+        <?php echo $this->tag->submitButton("Login");?>
+    </p>
+
+</form>
+<?php echo $this->tag->linkTo(['index','back',"class" => "btn btn-primary"]);

@@ -1,0 +1,22 @@
+<?php
+
+echo "<h1>Hello World</h1>";
+echo "<br>";
+echo "<hr>";
+
+echo PHP_EOL;
+echo $this->tag->linkTo(
+    [
+    'signup',
+    'Sign Up Here!',
+    "class" => "btn btn-primary"
+    ]
+);
+echo $this->tag->linkTo(
+    [
+    'login',
+    'Log in Here!',
+    "class" => "btn btn-primary"
+    ]
+);
+
