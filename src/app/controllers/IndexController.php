@@ -7,10 +7,7 @@ class IndexController extends Controller
 {
     public function indexAction()
     {
-        if ($this->cookies->has('remember-me')) {
-            $email = $this->cookies->get('remember-me')->getValue();
-            $this->response->redirect("login/loginByCookie/".$email."");
-        }
+        
         
 
         // return '<h1>Hello World!</h1>';

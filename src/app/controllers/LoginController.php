@@ -7,58 +7,30 @@ class LoginController extends Controller
 {
     public function indexAction()
     {
-        //return '<h1>Hello!!!</h1>';
-    }
-    public function loginAction()
-    {
+        if ($this->cookies->has('remember-me')) {
+            $email = $this->cookies->get('remember-me')->getValue();
+            $this->response->redirect("login/loginByCookie/".$email."");
+        }
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
-        if (empty($email) or empty($password)) {
-            $response = new Response(
-                "Sorry, Authentication failed",
-                404,
-                'Error'
-            );
-            if (true !== $response->isSent()) {
-                $response->send();
-            }
-            return;
-        } else {
-            $user = Users::findFirst("email='" . $email . "'");
+        if (!empty($email) or !empty($password)) {
+            $user = Users::findFirst("email='" . $email . "' and password = '" . $password . "'");
             if ($user) {
-                if ($user->password == $password) {
-                    $this->session->set('name', $user->name);
-                    $this->session->set('email', $user->email);
-                    $this->session->set('id', $user->user_id);
-                    if ($this->request->getPost('remember') == '1') {
-                        $this->cookies->set(
-                            'remember-me',
-                            $user->email,
-                            time() + 15 * 86400
-                        );
-                        $this->cookies->send();
-                    }
-                    $this->flash->error('succ');
-                    $this->response->redirect("index/dashboard");
-                } else {
-                    $response = new Response(
-                        "Sorry, Authentication failed",
-                        404,
-                        'Error'
+                $this->session->set('name', $user->name);
+                $this->session->set('email', $user->email);
+                $this->session->set('id', $user->user_id);
+                if ($this->request->getPost('remember') == '1') {
+                    $this->cookies->set(
+                        'remember-me',
+                        $user->email,
+                        time() + 15 * 86400
                     );
-                    if (true !== $response->isSent()) {
-                        $response->send();
-                    }
+                    $this->cookies->send();
                 }
+                $this->response->redirect("index/dashboard");
             } else {
-                $response = new Response(
-                    "Sorry, Authentication failed",
-                    404,
-                    'Error'
-                );
-                if (true !== $response->isSent()) {
-                    $response->send();
-                }
+                $this->response->setStatusCode(403, 'Wrong credentials')
+                ->setContent("Authentication Failed !!!!");
             }
         }
     }

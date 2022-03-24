@@ -1,6 +1,6 @@
 <h2>Log in using this form</h2>
 
-<?php echo $this->tag->form("login/login"); ?>
+<?php echo $this->tag->form("login"); ?>
 
     <p>
         <label for="email">E-mail</label>
@@ -20,4 +20,5 @@
     </p>
 
 </form>
-<?php echo $this->tag->linkTo(['index','back',"class" => "btn btn-primary"]);
+<?php echo $this->tag->linkTo(['index','back',"class" => "btn btn-warning"]);
+echo $this->response->getContent();
