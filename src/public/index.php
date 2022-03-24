@@ -10,8 +10,8 @@ use Phalcon\Mvc\Application;
 use Phalcon\Url;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Config;
+use Phalcon\Config\ConfigFactory;
 
-$config = new Config([]);
 
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));
@@ -67,6 +67,14 @@ $container->set(
     }
 );
 
+$container->set(
+    'config',
+    function () {
+        $file_name = '../app/etc/config.php';
+        $factory  = new ConfigFactory();
+        return $factory->newInstance('php', $file_name);
+    }
+);
 // $container->set(
 //     'mongo',
 //     function () {
