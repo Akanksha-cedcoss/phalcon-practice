@@ -53,19 +53,7 @@ $application = new Application($container);
 
 
 
-$container->set(
-    'db',
-    function () {
-        return new Mysql(
-            [
-                'host'     => 'mysql-server',
-                'username' => 'root',
-                'password' => 'secret',
-                'dbname'   => 'blog',
-            ]
-        );
-    }
-);
+
 
 $container->set(
     'config',
@@ -75,6 +63,33 @@ $container->set(
         return $factory->newInstance('php', $file_name);
     }
 );
+$container->set(
+    'db',
+    function () {
+        $db = $this->get('config')->db;
+        return new Mysql(
+            [
+                'host'     => $db->host,
+                'username' => $db->username,
+                'password' => $db->password,
+                'dbname'   => $db->dbname,
+            ]
+        );
+    }
+);
+// $container->set(
+//     'db',
+//     function () {
+//         return new Mysql(
+//             [
+//                 'host'     => 'mysql-server',
+//                 'username' => 'root',
+//                 'password' => 'secret',
+//                 'dbname'   => 'blog',
+//             ]
+//         );
+//     }
+// );
 // $container->set(
 //     'mongo',
 //     function () {
