@@ -21,9 +21,10 @@ class SignupController extends Controller
                 );
                 $user->save();
                 if ($user) {
-                    $this->session->set('name', $user->name);
-                    $this->session->set('role', $user->role);
-                    $this->session->set('id', $user->user_id);
+                    $session = $this->di->get('session');
+                    $session->set('name', $user->name);
+                    $session->set('email', $user->email);
+                    $session->set('id', $user->user_id);
                     header("location:../index");
                 } else {
                     $this->response->setContent($user->getMessages());

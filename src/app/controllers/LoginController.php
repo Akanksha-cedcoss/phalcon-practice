@@ -9,16 +9,17 @@ class LoginController extends Controller
     {
         if ($this->cookies->has('remember-me')) {
             $email = $this->cookies->get('remember-me')->getValue();
-            $this->response->redirect("login/loginByCookie/".$email."");
+            $this->response->redirect("login/loginByCookie/" . $email . "");
         }
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
         if (!empty($email) or !empty($password)) {
             $user = Users::findFirst("email='" . $email . "' and password = '" . $password . "'");
             if ($user) {
-                $this->session->set('name', $user->name);
-                $this->session->set('email', $user->email);
-                $this->session->set('id', $user->user_id);
+                $session = $this->di->get('session');
+                $session->set('name', $user->name);
+                $session->set('email', $user->email);
+                $session->set('id', $user->user_id);
                 if ($this->request->getPost('remember') == '1') {
                     $this->cookies->set(
                         'remember-me',
@@ -30,21 +31,22 @@ class LoginController extends Controller
                 $this->response->redirect("index/dashboard");
             } else {
                 $this->response->setStatusCode(403, 'Wrong credentials')
-                ->setContent("Authentication Failed !!!!");
+                    ->setContent("Authentication Failed !!!!");
             }
         }
     }
     public function loginByCookieAction($email)
     {
         $user = Users::findFirst("email='" . $email . "'");
-        $this->session->set('name', $user->name);
-        $this->session->set('email', $user->email);
-        $this->session->set('id', $user->user_id);
+        $session = $this->di->get('session');
+        $session->set('name', $user->name);
+        $session->set('email', $user->email);
+        $session->set('id', $user->user_id);
         $this->response->redirect("index/dashboard");
     }
     public function logoutAction()
     {
-        $this->session->destroy();
+        $this->di->get('session')->destroy();
         $this->cookies->get('remember-me')->delete();
         $this->response->redirect("index/index");
     }

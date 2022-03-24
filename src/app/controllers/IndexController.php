@@ -11,8 +11,9 @@ class IndexController extends Controller
     }
     public function dashboardAction()
     {
-        if (!($this->session->has('id') or $this->cookies->has('remember-me'))) {
+        if (!($this->di->get('session')->has('id') or $this->cookies->has('remember-me'))) {
             $this->response->redirect("index/index");
         }
+        $this->view->name = $this->di->get('session')->name;
     }
 }
