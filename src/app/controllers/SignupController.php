@@ -5,33 +5,32 @@ use Phalcon\Mvc\Controller;
 class SignupController extends Controller
 {
 
-    public function IndexAction()
+    public function indexAction()
     {
-    }
-
-    public function registerAction()
-    {
-        $user = new Users();
-        $email = $this->request->getPost();
-        $user->assign(
-            $this->request->getPost(),
-            [
-                'name',
-                'email',
-                'password'
-            ]
-        );
-
-        $success = $user->save();
-        $this->view->success = $success;
-
-        if ($success) {
-            $this->session->set('name', $user->name);
-            $this->session->set('email', $user->email);
-            $this->session->set('id', $user->user_id);
-            $this->response->redirect("index/dashboard");
-        } else {
-            $this->view->message = "Not Register succesfully due to following reason: <br>" . implode("<br>", $user->getMessages());
+        if ($this->request->getPost()) {
+            $email = $this->request->getPost('email');
+            $user = new Users();
+            try {
+                $user->assign(
+                    $this->request->getPost(),
+                    [
+                        'name',
+                        'email',
+                        'password'
+                    ]
+                );
+                $user->save();
+                if ($user) {
+                    $this->session->set('name', $user->name);
+                    $this->session->set('role', $user->role);
+                    $this->session->set('id', $user->user_id);
+                    header("location:../index");
+                } else {
+                    $this->response->setContent($user->getMessages());
+                }
+            } catch (Exception $e) {
+                $this->response->setContent("E-mail is already registered with us.");
+            }
         }
     }
 }

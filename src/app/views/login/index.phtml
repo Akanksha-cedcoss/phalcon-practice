@@ -1,5 +1,5 @@
 <h2>Log in using this form</h2>
-
+<?php echo "<p>".$this->response->getContent()."</p>"; ?>
 <?php echo $this->tag->form("login"); ?>
 
     <p>
@@ -21,4 +21,3 @@
 
 </form>
 <?php echo $this->tag->linkTo(['index','back',"class" => "btn btn-warning"]);
-echo $this->response->getContent();
