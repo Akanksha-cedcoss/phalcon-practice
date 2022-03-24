@@ -1,5 +1,6 @@
 <?php
-$this->tag->setTitle("hello user " . $this->session->name . "");
+echo "<h1>Welcome back</h1>";
+$this->tag->setTitle("hello user ' " . $this->session->name . " '");
 echo $this->tag->getTitle();
 echo "<br>";
 echo $this->tag->linkTo(
@@ -9,3 +10,6 @@ echo $this->tag->linkTo(
     "class" => "btn btn-primary"
     ]
 );
+echo "<hr>";
+echo "<h2>Date & time on server</h2>";
+echo $this->date;

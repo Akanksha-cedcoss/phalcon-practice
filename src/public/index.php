@@ -106,6 +106,16 @@ $container->set(
         return $cookies;
     }
 );
+
+$container->set(
+    'date',
+    function () {
+        // set default timezone
+        date_default_timezone_set('Asia/Kolkata'); // CDT
+
+        return date('d/m/Y  ||  H:i:s');
+    }
+);
 /**
  * my code end
  */
