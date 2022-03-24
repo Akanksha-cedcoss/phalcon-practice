@@ -25,7 +25,7 @@ class SignupController extends Controller
                     $session->set('name', $user->name);
                     $session->set('email', $user->email);
                     $session->set('id', $user->user_id);
-                    header("location:../index");
+                    $this->response->redirect("index/dashboard");
                 } else {
                     $this->response->setContent($user->getMessages());
                 }
