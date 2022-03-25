@@ -11,7 +11,10 @@ use Phalcon\Url;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Config;
 use Phalcon\Config\ConfigFactory;
-
+use Phalcon\Session\Manager;
+use Phalcon\Session\Adapter\Stream;
+use Phalcon\Http\Response\Cookies;
+use Phalcon\Escaper;
 
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));
@@ -105,8 +108,6 @@ $container->set(
  */
 
 //Start the session the first time some component request the session service
-use Phalcon\Session\Manager;
-use Phalcon\Session\Adapter\Stream;
 
 $container->setShared('session', function () {
     $session = new Manager();
@@ -117,7 +118,6 @@ $container->setShared('session', function () {
     return $session;
 });
 
-use Phalcon\Http\Response\Cookies;
 
 $container->set(
     'cookies',
@@ -129,12 +129,17 @@ $container->set(
         return $cookies;
     }
 );
-
+$container->set(
+    'escaper',
+    function () {
+        return new Escaper();
+    }
+);
 $container->set(
     'date',
     function () {
         // set default timezone
-        date_default_timezone_set('Asia/Kolkata'); // CDT
+        date_default_timezone_set('Asia/Kolkata');
 
         return date('d/m/Y  ||  H:i:s');
     }

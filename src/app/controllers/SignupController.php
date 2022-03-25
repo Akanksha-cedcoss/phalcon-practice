@@ -8,11 +8,13 @@ class SignupController extends Controller
     public function indexAction()
     {
         if ($this->request->getPost()) {
-            $email = $this->request->getPost('email');
+            $email = $this->escaper->escapeHtml($this->request->getPost('email'));
+            $name = $this->escaper->escapeHtml($this->request->getPost('name'));
+            $password = $this->escaper->escapeHtml($this->request->getPost('password'));
             $user = new Users();
             try {
                 $user->assign(
-                    $this->request->getPost(),
+                    array('name'=>$name, 'email'=>$email, 'password'=>$password),
                     [
                         'name',
                         'email',
