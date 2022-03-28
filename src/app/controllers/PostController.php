@@ -5,6 +5,11 @@ use Phalcon\Http\Response;
 
 class PostController extends Controller
 {
+    /**
+     * post and show descriptions posted by users
+     *
+     * @return void
+     */
     public function indexAction()
     {
         if ($this->request->getPost()) {

@@ -5,6 +5,12 @@ use Phalcon\Http\Response;
 
 class LoginController extends Controller
 {
+    
+    /**
+     * log in user
+     *
+     * @return void
+     */
     public function indexAction()
     {
         if ($this->cookies->has('remember-me')) {
@@ -31,14 +37,19 @@ class LoginController extends Controller
                 }
                 $this->response->redirect("index/dashboard");
             } else {
-                $this->logger
-                    ->excludeAdapters(['signup'])
-                    ->error('E-mail or password is incorrect');
+                $this->loginLogger->error('Incorrect credentials entered by user.');
                 $this->response->setStatusCode(403, 'Wrong credentials')
                     ->setContent("Authentication Failed !!!!");
             }
         }
     }
+
+    /**
+     * log in user if cookie is set
+     *
+     * @param [type] $email
+     * @return void
+     */
     public function loginByCookieAction($email)
     {
         $user = Users::findFirst("email='" . $email . "'");
@@ -48,6 +59,12 @@ class LoginController extends Controller
         $session->set('id', $user->user_id);
         $this->response->redirect("index/dashboard");
     }
+
+    /**
+     * logout user
+     *
+     * @return void
+     */
     public function logoutAction()
     {
         $this->di->get('session')->destroy();

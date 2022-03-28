@@ -33,6 +33,9 @@ $loader->registerDirs(
     ]
 );
 
+/**
+ * register namespace service
+ */
 $loader->registerNamespaces(
     [
         'App\components' => APP_PATH . '/components',
@@ -63,10 +66,9 @@ $container->set(
 
 $application = new Application($container);
 
-
-
-
-
+/**
+ * register config
+ */
 $container->set(
     'config',
     function () {
@@ -75,6 +77,10 @@ $container->set(
         return $factory->newInstance('php', $file_name);
     }
 );
+
+/**
+ * register db service using config file
+ */
 $container->set(
     'db',
     function () {
@@ -90,34 +96,38 @@ $container->set(
     }
 );
 
+/**
+ * register logger for signup log
+ */
 $container->set(
-    'logger',
+    'signupLogger',
     function () {
-        $adapter1 = new \Phalcon\Logger\Adapter\Stream(APP_PATH.'/storage/logs/signup.log');
-        $adapter2 = new \Phalcon\Logger\Adapter\Stream(APP_PATH.'/storage/logs/login.log');
-
+        $adapter1 = new \Phalcon\Logger\Adapter\Stream(APP_PATH . '/storage/logs/signup.log');
         return new Logger(
             'messages',
             [
-                'signup'   => $adapter1,
-                'login'  => $adapter2,
+                'main' => $adapter1,
             ]
         );
     }
 );
 
-// $container->set(
-//     'logger',
-//     function () {
-//         $adapter = new \Phalcon\Logger\Adapter\Stream(APP_PATH.'/storage/logs/signup.log');
-//         return new Logger(
-//             'messages',
-//             [
-//                 'main' => $adapter,
-//             ]
-//         );
-//     }
-// );
+
+/**
+ * register logger for login log
+ */
+$container->set(
+    'loginLogger',
+    function () {
+        $adapter2 = new \Phalcon\Logger\Adapter\Stream(APP_PATH . '/storage/logs/login.log');
+        return new Logger(
+            'messages',
+            [
+                'main' => $adapter2,
+            ]
+        );
+    }
+);
 // $container->set(
 //     'db',
 //     function () {
@@ -147,6 +157,9 @@ $container->set(
 
 //Start the session the first time some component request the session service
 
+/**
+ * register session service
+ */
 $container->setShared('session', function () {
     $session = new Manager();
     $files = new Stream([
@@ -156,7 +169,9 @@ $container->setShared('session', function () {
     return $session;
 });
 
-
+/**
+ * register cookie service
+ */
 $container->set(
     'cookies',
     function () {
@@ -167,12 +182,20 @@ $container->set(
         return $cookies;
     }
 );
+
+/**
+ * register escaper class
+ */
 $container->set(
     'escaper',
     function () {
         return new Escaper();
     }
 );
+
+/**
+ * register date service
+ */
 $container->set(
     'date',
     function () {

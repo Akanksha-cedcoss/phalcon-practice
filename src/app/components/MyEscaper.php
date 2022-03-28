@@ -5,6 +5,10 @@ namespace App\components;
 use Exception;
 use Phalcon\Escaper;
 
+
+/**
+ * escaper class return sanitize outputs
+ */
 class MyEscaper
 {
     public function __construct()

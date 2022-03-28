@@ -1,6 +1,9 @@
 <?php
 namespace App\components;
 
+/**
+ * helper class in namespane
+ */
 class Helper
 {
     private $title ="This is heading from helper";

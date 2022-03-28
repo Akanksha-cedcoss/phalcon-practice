@@ -9,6 +9,12 @@ class IndexController extends Controller
     {
         
     }
+
+    /**
+     * if user not logged in redirect him to index page
+     *
+     * @return void
+     */
     public function dashboardAction()
     {
         if (!($this->di->get('session')->has('id') or $this->cookies->has('remember-me'))) {
