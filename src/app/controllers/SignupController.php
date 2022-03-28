@@ -8,13 +8,16 @@ class SignupController extends Controller
     public function indexAction()
     {
         if ($this->request->getPost()) {
-            $email = $this->escaper->escapeHtml($this->request->getPost('email'));
-            $name = $this->escaper->escapeHtml($this->request->getPost('name'));
-            $password = $this->escaper->escapeHtml($this->request->getPost('password'));
+            $escaper = new \App\components\MyEscaper();
+            // echo '1 '.$this->request->getPost('email');
+            $email = $escaper->sanitize($this->request->getPost('email'));
+            $name = $escaper->sanitize($this->request->getPost('name'));
+            $password = $escaper->sanitize($this->request->getPost('password'));
+            // die($email);
             $user = new Users();
             try {
                 $user->assign(
-                    array('name'=>$name, 'email'=>$email, 'password'=>$password),
+                    array('name' => $name, 'email' => $email, 'password' => $password),
                     [
                         'name',
                         'email',
@@ -30,9 +33,14 @@ class SignupController extends Controller
                     $this->response->redirect("index/dashboard");
                 } else {
                     $this->response->setContent($user->getMessages());
+                    $this->logger->getAdapter('signup')->begin();
+                    $this->logger->error($user->getMessages());
                 }
             } catch (Exception $e) {
-                $this->response->setContent("E-mail is already registered with us.");
+                $this->logger
+                    ->excludeAdapters(['login'])
+                    ->error('This E-mail is already registered with us.');
+                $this->response->setContent('This E-mail is already registered with us.');
             }
         }
     }

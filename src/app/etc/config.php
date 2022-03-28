@@ -1,5 +1,7 @@
 <?php
 
+use Phalcon\Logger\Adapter\Stream;
+
 return [
     'app' => [
         'name' => 'My phalcon app',
@@ -10,5 +12,9 @@ return [
         'username' => 'root',
         'password' => 'secret',
         'dbname'   => 'blog',
+    ],
+    'log' => [
+        'login' => new Stream(APP_PATH . "/storage/logs/login.log"),
+        'signup' => new Stream(APP_PATH . "/storage/logs/signup.log"),
     ]
 ];

@@ -11,8 +11,9 @@ class LoginController extends Controller
             $email = $this->cookies->get('remember-me')->getValue();
             $this->response->redirect("login/loginByCookie/" . $email . "");
         }
-        $email = $this->request->getPost('email');
-        $password = $this->request->getPost('password');
+        $escaper = new \App\components\MyEscaper();
+        $email = $escaper->sanitize($this->request->getPost('email'));
+        $password = $escaper->sanitize($this->request->getPost('password'));
         if (!empty($email) or !empty($password)) {
             $user = Users::findFirst("email='" . $email . "' and password = '" . $password . "'");
             if ($user) {
@@ -30,6 +31,9 @@ class LoginController extends Controller
                 }
                 $this->response->redirect("index/dashboard");
             } else {
+                $this->logger
+                    ->excludeAdapters(['signup'])
+                    ->error('E-mail or password is incorrect');
                 $this->response->setStatusCode(403, 'Wrong credentials')
                     ->setContent("Authentication Failed !!!!");
             }

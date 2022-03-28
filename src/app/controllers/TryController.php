@@ -9,6 +9,8 @@ class TryController extends Controller
     {
         echo 'App name from congif = '.$this->di->get('config')->app->name;
         echo "<hr>";
+
+        
         $helper = new \App\components\Helper();
         echo $helper->getTitle();
         $helper->setTitle("New title");

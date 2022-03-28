@@ -8,7 +8,8 @@ class PostController extends Controller
     public function indexAction()
     {
         if ($this->request->getPost()) {
-            $description = $this->escaper->escapeHtml($this->request->getPost('description'));
+            $escaper = new \App\components\MyEscaper();
+            $description = $escaper($this->request->getPost('description'));
             $user_id = $this->session->id;
             $post = new Posts();
             try {

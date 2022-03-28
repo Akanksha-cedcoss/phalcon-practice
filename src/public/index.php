@@ -1,4 +1,5 @@
 <?php
+
 // print_r(apache_get_modules());
 // echo "<pre>"; print_r($_SERVER); die;
 // $_SERVER["REQUEST_URI"] = str_replace("/phalt/","/",$_SERVER["REQUEST_URI"]);
@@ -15,6 +16,8 @@ use Phalcon\Session\Manager;
 use Phalcon\Session\Adapter\Stream;
 use Phalcon\Http\Response\Cookies;
 use Phalcon\Escaper;
+use Phalcon\Logger;
+use Phalcon\Logger\Adapter\File;
 
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));
@@ -32,7 +35,7 @@ $loader->registerDirs(
 
 $loader->registerNamespaces(
     [
-        'App\components' => APP_PATH.'/components',
+        'App\components' => APP_PATH . '/components',
     ]
 );
 
@@ -86,6 +89,35 @@ $container->set(
         );
     }
 );
+
+$container->set(
+    'logger',
+    function () {
+        $adapter1 = new \Phalcon\Logger\Adapter\Stream(APP_PATH.'/storage/logs/signup.log');
+        $adapter2 = new \Phalcon\Logger\Adapter\Stream(APP_PATH.'/storage/logs/login.log');
+
+        return new Logger(
+            'messages',
+            [
+                'signup'   => $adapter1,
+                'login'  => $adapter2,
+            ]
+        );
+    }
+);
+
+// $container->set(
+//     'logger',
+//     function () {
+//         $adapter = new \Phalcon\Logger\Adapter\Stream(APP_PATH.'/storage/logs/signup.log');
+//         return new Logger(
+//             'messages',
+//             [
+//                 'main' => $adapter,
+//             ]
+//         );
+//     }
+// );
 // $container->set(
 //     'db',
 //     function () {
